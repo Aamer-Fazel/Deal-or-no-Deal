@@ -1,0 +1,97 @@
+#Aamer Fazel
+#Deal or No Deal
+import random
+
+cases = [1, 5, 10, 15, 75, 100, 200, 300, 400, 500, 750, 1000, 5000, 10000, 25000, 50000, 75000, 100000, 200000, 300000, 400000, 500000, 750000, 1000000]
+
+#empty arrray checks which case you have selected
+checkList = []
+
+#value of your case
+yourCase = []
+
+def main():
+	myCase = raw_input("Choose a case between 1 and 26:")
+
+	if int(myCase) > 26 or int(myCase) < 1:
+		print("Boi what you doing. 1 through 26.")
+		main()#recursize function
+
+	else:
+		#find your case
+		Case = random.choice(cases)
+		#remove it from the cases array
+		cases.remove(Case)
+		#add it to yourCase
+		yourCase.append(Case)
+		#put it is your checkList
+		checkList.append(Case)
+
+		#Remove Function call
+		Remove(myCase, checkList)
+
+def Remove(myCase, checkList):
+	turns = 3
+	while turns != 0: #While turns does not equal zero
+		print("Here's the available cases:")
+		print(cases) #print whats left
+		caseRemove = raw_input("Choose a case to be removed: ")
+		if int(caseRemove) > 26 or int(caseRemove) < 1:
+			print("1 through 26, you silly")
+
+			if caseRemove in checkList:	
+				print("Case is already taken.")
+			else:
+				Case = random.choice(cases)
+				cases.remove(Case)
+				checkList.append(caseRemove)
+				turns = turns - 1
+		#checks to see if there's one case left
+		if len(cases) == 1:
+			Banker(myCase, checkList)
+		Banker(myCase, checkList)
+def Banker(myCase,checkList):
+	#Used to find the Average of your cases
+	bankOffer = sum(cases)/float(len(cases))	
+	
+	#Again checks to see if you have 1 case left over
+	if len(cases) == 1:
+		
+		#Asks you to see if you want your case or not
+		finalChoice = raw_input("Would you like to keep your case (Y)es or (N)o: ")
+		if finalChoice == "y" or finalChoice == "Y":
+			
+			#This Little peice is to make it when the number is displayed, it won't have bracets around it
+			yourCase2 = sum(yourCase)
+			print "You won","$",yourCase2
+			main()
+			
+		elif finalChoice == "N" or finalChoice == "n":
+			print "You won","$","%.2f"%bankOffer
+			main()
+			
+		#If you input something besides n or y then it keeps asking the question until you get it right
+		else:
+			print "Invalid Input"
+			Banker(myCase,checkList)
+			
+	#this portion is for when the cases are greater than 1
+	if len(cases) > 1:	
+			
+		#Everything Down here is pretty much self explainable
+		print "The Banker Offered","$","%.2f"%bankOffer, "Do You Accept (Y)es or (N)o" 
+		offerDecision = raw_input(">")
+		
+		if offerDecision == "Y" or offerDecision == "y":
+			print "You\'ve won","$","%.2f"%bankOffer
+			#Same as above
+			yourCase2 = sum(yourCase)
+			
+			print "Your case contained","$",yourCase2
+		elif offerDecision == "N" or offerDecision == "n":
+			Remove(myCase,checkList)
+				
+		else:
+			print "Invalid Input"
+			Banker(myCase,checkList)
+main()
